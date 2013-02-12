@@ -3,41 +3,16 @@
  * @author Matt Null - http://mattnull.com
  */
 
-var express = require('express')
-  , app = express()
-  , http = require('http')
+var http = require('http')
   , fs = require('fs')
-  , server = http.createServer(app)
-  , path = require('path')
-  , twitter = require('ntwitter');
-
-app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(express.favicon());
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
-});
-
-app.configure('development', function(){
-  app.use(express.errorHandler());
-});
-
-app.all('/', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
+  , server = http.createServer()
+  , twitter = require('ntwitter')
+  , port = 3000
 
 var twitterConfig = fs.readFileSync('twitterconfig.json');
 
 if(twitterConfig){
   twitterConfig = JSON.parse(twitterConfig);
-  console.log(twitterConfig)
   var twit = new twitter({
     consumer_key: twitterConfig.consumer_key,
     consumer_secret: twitterConfig.consumer_secret,
@@ -46,20 +21,14 @@ if(twitterConfig){
   });
 }
 
-
-server.listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
+server.listen(port, function(){
+  console.log("Server listening on port " + port);
 });
 
 var io = require('socket.io').listen(server);
-// io.enable('browser client minification');  // send minified client
-// io.enable('browser client etag');          // apply etag caching logic based on version number
-// io.enable('browser client gzip');          // gzip the file
+
 io.set('log level', 1);                    // reduce logging
 io.disable('browser client cache');
-// // enable all transports (optional if you want flashsocket support, please note that some hosting
-// // providers do not allow you to create servers that listen on a port different than 80 or their
-// // default port)
 io.set('transports', [
     'websocket'
   , 'flashsocket'
@@ -67,10 +36,6 @@ io.set('transports', [
   , 'xhr-polling'
   , 'jsonp-polling'
 ]);
-
-// io.configure('development', function(){
-//   io.set('transports', ['websocket']);
-// });
 
 // client object
 var clients = {}
