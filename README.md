@@ -3,7 +3,7 @@ The Future is Now - Server
 
 ## Initial Setup
 * Run `npm install`
-* Create a file called twitterconfig.json in your root app director that looks like :
+* Create a file called twitterconfig.json in your root app directory, that looks like :
 
 ```javascript
 {
