@@ -1,4 +1,8 @@
-thefutureisnow-server
+The Future is Now - Server
 =====================
 
-Server for websocket demonstration at SXSW 2013
+## Setup
+* Run `npm install`
+
+## Development
+* Run `node app.js`
