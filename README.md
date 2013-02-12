@@ -1,7 +1,7 @@
 The Future is Now - Server
 =====================
 
-## Setup
+## Initial Setup
 * Run `npm install`
 
 ## Development
