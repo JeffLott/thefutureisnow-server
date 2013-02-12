@@ -37,10 +37,11 @@ var twitterConfig = fs.readFileSync('twitterconfig.json');
 
 if(twitterConfig){
   twitterConfig = JSON.parse(twitterConfig);
+  console.log(twitterConfig)
   var twit = new twitter({
     consumer_key: twitterConfig.consumer_key,
     consumer_secret: twitterConfig.consumer_secret,
-    access_token_key: twitterConfig.consumer_secret,
+    access_token_key: twitterConfig.access_token_key,
     access_token_secret: twitterConfig.access_token_secret
   });
 }
