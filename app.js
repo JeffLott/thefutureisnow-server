@@ -3,11 +3,16 @@
  * @author Matt Null - http://mattnull.com
  */
 
+var NODE_ENV = NODE_ENV || false
+
 var http = require('http')
   , fs = require('fs')
-  , server = http.createServer()
+  , server = http.createServer(function(req, res){
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  })
   , twitter = require('ntwitter')
-  , port = 3000
+  , port = NODE_ENV ? 80 : 3000
 
 var twitterConfig = fs.readFileSync('twitterconfig.json');
 
@@ -25,7 +30,7 @@ server.listen(port, function(){
   console.log("Server listening on port " + port);
 });
 
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(80);
 
 io.set('log level', 1);                    // reduce logging
 io.disable('browser client cache');

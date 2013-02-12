@@ -1,6 +1,6 @@
 {
   "name": "thefutureisnow",
-  "version": "0.0.1-72",
+  "version": "0.0.1-82",
   "private": true,
   "scripts": {
     "start": "app.js"
