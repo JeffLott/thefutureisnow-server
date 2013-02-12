@@ -4,7 +4,7 @@ The Future is Now - Server
 ## Initial Setup
 * Run `npm install`
 * Create a file called twitterconfig.json in your root app director that looks like :
-```javascript
+```
 {
  	"consumer_key" : "MY CONSUMER KEY",
 	"consumer_secret" : "MY CONSUMER SECRET",
