@@ -33,13 +33,18 @@ app.all('/', function(req, res, next) {
   next();
 });
 
+var twitterConfig = fs.readFileSync('twitterconfig.json');
 
-var twit = new twitter({
-  consumer_key: 'lFACyPpFfsUdHZddGMTGg',
-  consumer_secret: 'HS8vwMR5hB4cw4ZZb4at5SEHlW9NELyOHO4sOwQ',
-  access_token_key: '121854213-5JlEFcN18IYZUPXo9mLt1OWv6DvQwDRnW22cJ8dh',
-  access_token_secret: 'p6yBIShpliMlls5qf6JvZl9QoYpdawHqIkowXqZTY'
-});
+if(twitterConfig){
+  twitterConfig = JSON.parse(twitterConfig);
+  var twit = new twitter({
+    consumer_key: twitterConfig.consumer_key,
+    consumer_secret: twitterConfig.consumer_secret,
+    access_token_key: twitterConfig.consumer_secret,
+    access_token_secret: twitterConfig.access_token_secret
+  });
+}
+
 
 server.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
@@ -124,12 +129,14 @@ io.sockets.on('connection', function (socket) {
 
   // -- Twitter Example
     //Twitter example
-  socket.on('fetchTweets', function (data) {
-    search = data.search || 'sxsw'
-    twit.stream('statuses/filter', {track : search}, function(stream) {
-      stream.on('data', function (data) {
-        socket.emit('tweets', data)
+  if(twit){
+    socket.on('fetchTweets', function (data) {
+      search = data.search || 'sxsw'
+      twit.stream('statuses/filter', {track : search}, function(stream) {
+        stream.on('data', function (data) {
+          socket.emit('tweets', data)
+        });
       });
     });
-  });
+  }
 });
