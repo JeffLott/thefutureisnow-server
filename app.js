@@ -63,6 +63,8 @@ io.sockets.on('connection', function (socket) {
     socket.broadcast.emit('chatUpdate', {user : user, message : message});
     socket.emit('chatUpdate', {user : user, message : message});
 
+    //for demo
+    socket.broadcast.emit('receiveMessage',message)
   });
 
   socket.on('updateUser', function(user){
