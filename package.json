@@ -1,6 +1,6 @@
 {
   "name": "thefutureisnow",
-  "version": "0.0.1-87",
+  "version": "0.0.1-94",
   "private": true,
   "scripts": {
     "start": "app.js"
@@ -12,7 +12,9 @@
   ],
   "dependencies": {
     "ntwitter": "~0.5.0",
-    "socket.io": "0.9.x"
+    "socket.io": "0.9.x",
+    "webrtc.io": "0.0.3",
+    "express": "~3.1.0"
   },
   "engines": {
     "node": "0.8.x"

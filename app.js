@@ -42,63 +42,8 @@ io.set('transports', [
   , 'jsonp-polling'
 ]);
 
-// client object
-var clients = {}
-
 io.sockets.on('connection', function (socket) {
-  // ------ CHAT
-  //when the user connects add them to our users object
-  clients[socket.id] = {id : socket.id, nickname : false};
-
-  //immediately tell the chat room someone has connected
-  socket.broadcast.emit('userEntered', {id : socket.id});
-  socket.emit('userList', clients);
-  socket.emit('setClientID', socket.id);
-
-  socket.on('sendMessage', function (data) {
-    var message = data.message || '';
-    var user = data.user || socket.id;
-
-    //broadcast the update and send it to the sender
-    socket.broadcast.emit('chatUpdate', {user : user, message : message});
-    socket.emit('chatUpdate', {user : user, message : message});
-  });
-
-  socket.on('updateUser', function(user){
-    //update their nickname in memory
-    clients[socket.id].nickname = user;
-    socket.broadcast.emit('userUpdate', {id : socket.id, user: user});
-    socket.emit('userUpdate', {id : socket.id, user: user});
-  });
-
-  socket.on('disconnect', function(){
-    delete clients[socket.id];
-    socket.broadcast.emit('userLeft', {id : socket.id})
-    socket.emit('userList', clients);
-  });
-
-
-  //Video Chat
-  socket.on('checkUserStatus', function(data){
-    var inSession = !clients[data.to] || !clients[data.to].inSession ? data.to : false;
-    socket.emit('userStatus', inSession)
-  });
-
-  socket.on('streamVideo', function(data){
-    if(io.sockets.sockets[data.to]){
-      io.sockets.sockets[data.to].emit('videoStream', data)
-    }
-  });
-
-  socket.on('streamAudio', function(data){
-    if(io.sockets.sockets[data.to]){
-      io.sockets.sockets[data.to].emit('audioStream', data)
-    }
-  });
-  // ------ END CHAT
-
   // -- Twitter Example
-    //Twitter example
   if(twit){
     socket.on('fetchTweets', function (data) {
       search = data.search || 'sxsw'
@@ -109,10 +54,9 @@ io.sockets.on('connection', function (socket) {
       });
     });
   }
-  //Web Sockets demo
-    socket.on('sendDemoMessage', function(message){
-      //for demo
-      socket.broadcast.emit('receiveDemoMessage',message)
-      socket.emit('receiveDemoMessage',message)
-    })
+  // -- Web Sockets demo
+  socket.on('sendDemoMessage', function(message){
+    socket.broadcast.emit('receiveDemoMessage',message)
+    socket.emit('receiveDemoMessage',message)
+  })
 });
